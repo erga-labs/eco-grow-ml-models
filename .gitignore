@@ -3,3 +3,4 @@ venv/
 .venv/
 .vscode/
 __pycache__/
+secret.py
