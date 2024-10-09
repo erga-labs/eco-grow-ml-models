@@ -1,7 +1,9 @@
+
+from db import get_record
 from flask import Flask, request, jsonify
 import requests
 import pickle
-from db import get_record
+import glob
 
 """
 
@@ -19,11 +21,19 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 
 try:
-    with open("naive_bayes_model.pkl", 'rb') as model_file:
+    all_models = glob.glob("*-model.pkl", root_dir="models/")
+    if not all_models:
+        raise FileNotFoundError()
+    # just choosing the first model
+    model_path = all_models[0]
+
+    with open(model_path, 'rb') as model_file:
         MODEL = pickle.load(model_file)
+
 except FileNotFoundError:
-    print("Error: Model file not found. Ensure 'naive_bayes_model.pkl' exists in the correct path.")
+    print("Error: Model file not found. Ensure that there is a model under 'models/' directory.")
     MODEL = None
+
 except Exception as e:
     print(f"Error loading model: {str(e)}")
     MODEL = None
@@ -50,6 +60,7 @@ def predict():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/', methods=['GET'])
 def home():
     try:
@@ -60,5 +71,7 @@ def home():
     except requests.RequestException as e:
         return f"<h1>Error: {str(e)}</h1>", 500
 
+
 if __name__ == '__main__':
+    print(MODEL)
     app.run()
