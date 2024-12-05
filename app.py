@@ -8,12 +8,7 @@ import glob
 """
 
 TODO: Update the following:
-- Update database to include the ph feature
 - Use the weather API to get the rainfall, also add this feature to the database
-- Update the features in clean() to include the new features
-
-Model currently returns N/A as not all features are provided.
-
 """
 
 
